@@ -19,7 +19,7 @@ const NewBlog = () => {
       likes: 0,
       createdAt: new Date().toISOString(),
     };
-    const updatedBlogs = [...existingBlogs, newBlog];
+    const updatedBlogs = [newBlog, ...existingBlogs];
     localStorage.setItem("blogs", JSON.stringify(updatedBlogs));
 
     setSubmitted(true);
