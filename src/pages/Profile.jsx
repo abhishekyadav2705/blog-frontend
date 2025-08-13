@@ -8,7 +8,7 @@ function Profile() {
     <Container sx={{ padding: "2rem", maxWidth: "800px" }}>
       <Box sx={{ textAlign: "center" }}>
         <img
-          src="https://media.licdn.com/dms/image/v2/D5603AQHXMBJhnNuO8w/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1710858274106?e=1750291200&v=beta&t=qlngfrCI-ZQ9ZUXsk3VdTeU_QL7n7t-T-VF_tLwml7o" // Your image URL
+          src="https://media.licdn.com/dms/image/v2/D5603AQHXMBJhnNuO8w/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1710858274106?e=2147483647&v=beta&t=Z_zcSnNH8WWF7gT2kCbGuJcPcMZX5Gim2YcDiuqRIhw" // Your image URL
           alt="Abhishek"
           style={{
             borderRadius: "50%",
