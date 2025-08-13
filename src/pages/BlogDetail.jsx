@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { initialBlogData } from "../data/blogs";
 import "./BlogDetail.css";
 
 function BlogDetail() {
@@ -9,28 +10,29 @@ function BlogDetail() {
   const [showHeart, setShowHeart] = useState(false);
 
   useEffect(() => {
-    // Load blogs from localStorage
-    const blogs = JSON.parse(localStorage.getItem("blogs")) || [];
-    const found = blogs.find((b) => b.id === parseInt(id));
+    // Load from localStorage, merge with initial blogs
+    const stored = JSON.parse(localStorage.getItem("blogs")) || [];
+    const merged = [
+      ...initialBlogData.filter((ib) => !stored.some((sb) => sb.id === ib.id)),
+      ...stored,
+    ];
+    localStorage.setItem("blogs", JSON.stringify(merged));
+
+    const found = merged.find((b) => b.id === parseInt(id));
     if (found) setBlog(found);
   }, [id]);
 
   const handleLike = () => {
     setShowHeart(true);
-
     setBlog((prev) => {
       const newLikes = prev.likes + 1;
-
-      // Update likes in localStorage
       const blogs = JSON.parse(localStorage.getItem("blogs")) || [];
       const updatedBlogs = blogs.map((b) =>
         b.id === prev.id ? { ...b, likes: newLikes } : b
       );
       localStorage.setItem("blogs", JSON.stringify(updatedBlogs));
-
       return { ...prev, likes: newLikes };
     });
-
     setTimeout(() => setShowHeart(false), 2000);
   };
 
@@ -43,14 +45,11 @@ function BlogDetail() {
       <button className="back-button" onClick={() => navigate("/")}>
         ← Back to Blogs
       </button>
-
       <h1 className="detail-title">{blog.title}</h1>
       <p className="detail-meta">
         📅 {formattedDate} | ❤️ {blog.likes} likes
       </p>
-
       <div className="detail-content">{blog.content}</div>
-
       <div className="like-area">
         <button className="like-button" onClick={handleLike}>
           Like ❤️

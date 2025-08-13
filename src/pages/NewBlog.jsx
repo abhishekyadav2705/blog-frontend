@@ -1,17 +1,30 @@
 import React, { useState } from "react";
-import { addBlog } from "../services/api";
 import { TextField, Button, Container, Typography } from "@mui/material";
 
 const NewBlog = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [submitted, setSubmitted] = useState(false);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    await addBlog({ title, content });
+
+    const existingBlogs = JSON.parse(localStorage.getItem("blogs")) || [];
+    const newBlog = {
+      id: existingBlogs.length
+        ? existingBlogs[existingBlogs.length - 1].id + 1
+        : 1,
+      title,
+      content,
+      likes: 0,
+      createdAt: new Date().toISOString(),
+    };
+    const updatedBlogs = [...existingBlogs, newBlog];
+    localStorage.setItem("blogs", JSON.stringify(updatedBlogs));
+
+    setSubmitted(true);
     setTitle("");
     setContent("");
-    alert("Blog added successfully!");
   };
 
   return (
@@ -25,6 +38,7 @@ const NewBlog = () => {
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           required
+          disabled={submitted}
         />
         <TextField
           fullWidth
@@ -35,11 +49,22 @@ const NewBlog = () => {
           value={content}
           onChange={(e) => setContent(e.target.value)}
           required
+          disabled={submitted}
         />
-        <Button variant="contained" type="submit" sx={{ marginTop: 2 }}>
+        <Button
+          variant="contained"
+          type="submit"
+          sx={{ marginTop: 2 }}
+          disabled={submitted}
+        >
           Submit
         </Button>
       </form>
+      {submitted && (
+        <Typography sx={{ marginTop: 2, color: "green" }}>
+          Thank you! Your blog has been added.
+        </Typography>
+      )}
     </Container>
   );
 };
